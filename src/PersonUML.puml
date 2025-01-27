@@ -1,0 +1,16 @@
+@startuml
+class Person {
+    - String firstName
+    - String lastName
+    - String ID
+    - String title
+    - int yearOfBirth
+
+    + Person(String firstName, String lastName, String ID, String title, int YOB)
+    + String fullName()
+    + String formalName()
+    + String getAge()
+    + String getAge(int year)
+    + String toCSVRecord()
+}
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+class Product {
+    - String id
+    - String name
+    - String description
+    - double cost
+
+    + Product(String id, String name, String description, double cost)
+    + String getID()
+    + String getName()
+    + String getDescription()
+    + double getCost()
+    + String toCSVRecord()
+}
+@enduml

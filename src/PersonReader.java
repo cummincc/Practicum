@@ -1,38 +1,38 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-import javax.swing.JFileChooser;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class PersonReader {
 
     public static void main(String[] args) {
-        JFileChooser fileChooser = new JFileChooser();
-        int returnValue = fileChooser.showOpenDialog(null);
-
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            displayFileContents(selectedFile);
-        } else {
-            System.out.println("No file selected.");
-        }
+        String fileName = "PersonData.csv";
+        displayFileContents(fileName);
     }
 
-    private static void displayFileContents(File file) {
-        try (Scanner fileScanner = new Scanner(file)) {
-            // Print header for the formatted table
-            System.out.printf("%-10s %-15s %-15s %-10s %-4s\n", "ID", "First Name", "Last Name", "Title", "Year of Birth");
-            System.out.println("==============================================================");
+    public static void displayFileContents(String fileName) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            // Skip the header line
+            String line = reader.readLine();  // Read header
 
-            // Process each line from the CSV file and display formatted data
-            while (fileScanner.hasNextLine()) {
-                String[] personData = fileScanner.nextLine().split(",\\s*"); // Split based on comma and optional space
-                if (personData.length == 5) {
-                    System.out.printf("%-10s %-15s %-15s %-10s %-4s\n",
-                            personData[0], personData[1], personData[2], personData[3], personData[4]);
+            // Now read the actual data lines
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(", ");
+
+                // Ensure the data contains enough fields
+                if (data.length == 5) {
+                    String firstName = data[0];
+                    String lastName = data[1];
+                    String id = data[2];
+                    String title = data[3];
+                    int yob = Integer.parseInt(data[4]); // Parse year of birth
+
+                    System.out.printf("%-10s %-15s %-15s %-10s %d\n", id, firstName, lastName, title, yob);
                 }
             }
-        } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.err.println("Error parsing number: " + e.getMessage());
         }
     }
 }

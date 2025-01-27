@@ -6,19 +6,19 @@ public class PersonGenerator {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ArrayList<String> persons = new ArrayList<>();
+        ArrayList<Person> persons = new ArrayList<>();
 
         boolean morePersons = true;
         while (morePersons) {
-            // Collecting data for each person
             String id = SafeInput.getNonZeroLenString(scanner, "Enter ID");
             String firstName = SafeInput.getNonZeroLenString(scanner, "Enter First Name");
             String lastName = SafeInput.getNonZeroLenString(scanner, "Enter Last Name");
             String title = SafeInput.getNonZeroLenString(scanner, "Enter Title");
             int yearOfBirth = SafeInput.getInt(scanner, "Enter Year of Birth");
 
-            // Add the person's data in a CSV-friendly format
-            persons.add(String.format("%s, %s, %s, %s, %d", id, firstName, lastName, title, yearOfBirth));
+            // Create person object and add it to the ArrayList
+            Person person = new Person(id, firstName, lastName, title, yearOfBirth);
+            persons.add(person);
 
             // Ask if user wants to enter another person
             System.out.print("Do you want to enter another person? (y/n): ");
@@ -35,8 +35,8 @@ public class PersonGenerator {
             try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fileName)))) {
                 // Print formatted header for CSV
                 out.println("ID, First Name, Last Name, Title, Year of Birth");
-                for (String person : persons) {
-                    out.println(person);
+                for (Person person : persons) {
+                    out.println(person.toCSVRecord());
                 }
             }
             System.out.println("Data saved to " + fileName);
